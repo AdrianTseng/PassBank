@@ -1,0 +1,77 @@
+{% extends "__base.html" %}
+{% block top %}
+    <div class="hidden-for-small-only signup-padding"></div>
+    <div class="search-area"
+         step-text="你好，感谢您使用我的服务，现在请让我稍作介绍"
+         step-index="1"
+         step-placement="bottom">
+        <div class="hidden-for-small-only search-padding"></div>
+
+        <form class="search-section">
+            <div class="row collapse">
+                <div class="small-8 medium-9 columns">
+                    <input class="input-app" type="text" placeholder="检索密码数据" style="text-align: center"
+                           step-text="对了，如果数据太多可以在这里筛选、检索"
+                           step-index="9"
+                           step-placement="bottom"
+                           ng-model="searchText"
+                           ng-focus="searchText = undefined"/>
+                </div>
+                <div class="small-4 medium-3 columns">
+                    <button type="button" class="button secondary button-app postfix" ng-click="create()"
+                            step-text="最后，iOS用户在共享按钮中点击“添加到主屏幕”就可以生成本地应用了"
+                            step-index="10"
+                            step-placement="bottom">新增</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block center %}
+    <div class="keeper-content">
+        <div ng-if="!current.authenticated">
+            <h2>需要用户登陆</h2>
+        </div>
+
+        <div ng-if="!current.activated && current.authenticated">
+            <h2>你还没有激活该服务</h2>
+            <br/>
+            <br/>
+            <p style="color: black">为了更好的保护您的信息安全，需要您使用简单易用的PIN码，并结合我们为您生成的用户指纹以加密数据。</p>
+            <p>请在 &nbsp;<a class="button secondary radius tiny" href="/preference">偏好设置</a>&nbsp; 中设置PIN码以激活服务。</p>
+            <p>本应用的主旨在于提同一个相对安全、可靠、易用的密码管理服务。通过“一站一密”的健康账户模式，避免由于社会工程学导致的信息泄漏。</p>
+            <p><em>请务必保管好您的PIN码，若遗失将导致托管在此的数据无法找回。本应用是由个人提供的非商业免费服务，不推荐在此保存与资金相关的重要信息。</em></p>
+        </div>
+
+        <div ng-if="current.authenticated && current.activated && !current.opened">
+            <h2 style="margin-top: 20vh">输入四位PIN码以解锁</h2>
+
+            <form name="pin_code" ng-submit="verify_pin(pin_code.$valid)" novalidate>
+                <div class="row collapse">
+                    <div class="small-8 medium-10 columns">
+                        <input class="input-app" type="password" placeholder="请输入您的4位PIN码"
+                               name="pin"
+                               ng-model="current.pin"
+                               required
+                               pattern="\d{4}"
+                               ng-focus="current.pin = undefined"/>
+                    </div>
+                    <div class="small-4 medium-2 columns">
+                        <button type="submit" class="button secondary button-app postfix">解锁</button>
+                    </div>
+                </div>
+                <alert class="danger"
+                   ng-show="pin_code.pin.$invalid && pin_code.$submitted">PIN码由四位数字构成</alert>
+            </form>
+            <alert class="danger"
+                   ng-if="current.pin_error">您输入的PIN码不正确</alert>
+        </div>
+        <div ng-if="current.authenticated && current.activated && current.opened && !current.authorized">
+            <h2 class="colorful">等待服务器授权并解密数据</h2>
+        </div>
+        <div ng-if="current.authenticated && current.activated && current.opened && current.authorized">
+            <div ng-include="current.mode.partials"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "__base.html" %}
+{% block center %}
+    <div ng-if="!state.authenticated">
+        <h2>需要登录后才能使用该服务</h2>
+    </div>
+    <div ng-if="state.authenticated">
+        <alert ng-repeat="alert in alerts" type="alert.type">{{alert.msg}}</alert>
+        <form name="username" ng-submit="update_username(username.$valid)" novalidate>
+            <fieldset>
+                <legend>修改用户名</legend>
+                <div class="row collapse">
+                    <div class="small-8 columns">
+                        <input class="input-app" type="text" placeholder="若需更改用户名请输入" required
+                               ng-model="data.username" />
+                    </div>
+                    <div class="small-4 columns">
+                        <button type="submit" class="button secondary postfix" ng-disabled="state.busy || username.$invalid">更新</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <form name="email" ng-submit="update_email()">
+            <fieldset>
+                <legend>验证邮箱</legend>
+                <div class="row collapse">
+                    <div class="small-8 columns">
+                        <input class="input-app" type="email" name="email" id="email" placeholder="请在此输入您要绑定的新邮箱" required
+                               ng-model="data.email" />
+                    </div>
+                    <div class="small-4 columns">
+                        <button type="submit" class="button secondary postfix" ng-disabled="state.busy">发送验证邮件</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form name="password" ng-submit="update_password(password.$valid)" novalidate>
+            <fieldset>
+                <legend>更新密码</legend>
+                <input class="input-app input-group" type="password" placeholder="现役密码" required name="original"
+                       ng-model="data.password" />
+                <input class="input-app input-group" type="password" placeholder="更新密码" required name="new"
+                       ng-model="data.password_new"/>
+                <input class="input-app input-group" type="password" placeholder="验证密码" required name="verify"
+                       ng-model="data.password_verify"
+                       equals="data.password_new" />
+                <alert class="danger"
+                       ng-show="(password.original.$invalid&&!password.original.$pristine)||
+                            (password.new.$invalid&&!password.new.$pristine)||
+                            (password.verify.$error.required &&!password.verify.$pristine)">请填写上述密码</alert>
+                <alert class="danger" ng-show="password.verify.$error.equals&&!password.verify.$pristine">新密码与验证密码不符，请确定您输入的新密码无误</alert>
+                <button type="submit" class="button secondary small expand user-group-button"
+                        ng-disabled="state.busy || password.$invalid">更新密码</button>
+            </fieldset>
+        </form>
+        <div class="delete-section" ng-if="false">
+            <button class="button alert expand">删除账户</button>
+        </div>
+    </div>
+{% endblock %}

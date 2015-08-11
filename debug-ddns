@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ `which dnspod-ddns` ];then
+    read -p "请设定获取ip的端口： "
+    if [ ! $REPLY ];then
+        echo "没有设定端口，不做任何操作"
+        exit
+    fi
+    eval "dnspod-ddns --dns-domain qmz.me --dns-host develop --user qm.zheng@outlook.com --passwd ut6xtt6H7s4M3kcwFc7b -i $REPLY"
+else
+    echo "您没有安装dnspod-ddns，请使用'npm install -g dnspod-ddns'安装"
+fi

@@ -1,0 +1,143 @@
+<form name="form" ng-submit="submit(form.$valid)" novalidate>
+    <button class="button button-app small expand "
+            ng-bind="current.mode.value==1?'返回':'撤销'"
+            ng-click="toBrowser()">
+    </button>
+
+    <div class="row"
+         step-text="托管一个密码数据，从这里开始" step-index="2">
+        <div class="clearfix"
+             step-text="在这里输入一个数据标签，用来给你自己查看、选择，比如腾讯帐号就可以输入：“QQ”"
+             step-index="3"
+             step-placement="bottom">
+            <div class="small-4 medium-3 columns">
+                <label for="label" class="left inline">密码标签</label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <input type="text" id="label" name="label" placeholder="请输入您要保存的帐号标签,如：'腾讯'"
+                       required
+                       class="input-app"
+                       ng-readonly="current.mode.value==1"
+                       ng-model="current.edit.label" />
+            </div>
+            <div class="small-8 medium-9 offset-small-4 offset-medium-3 columns" ng-show="form.label.$invalid && !form.label.$pristine">
+                <alert class="danger">请输入密码标签</alert>
+            </div>
+        </div>
+
+        <div class="clearfix"
+             step-text="在这里粘贴或者输入待托管账户的用户名、邮箱等"
+             step-index="4"
+             step-placement="bottom">
+            <div class="small-4 medium-3 columns">
+                <label for="account" class="left inline">账号|邮箱</label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <input type="text" id="account" name="account" placeholder="请在此保存用户名或邮箱,如：'mail@mail.com'" required
+                       select-on-click
+                       class="input-app"
+                       ng-readonly="current.mode.value==1"
+                       ng-model="current.edit.account" />
+            </div>
+            <div class="small-8 medium-9 offset-small-4 offset-medium-3 columns" ng-show="form.account.$invalid && !form.account.$pristine">
+                <alert class="danger">请输入用户名或邮箱</alert>
+            </div>
+        </div>
+
+        <div class="clearfix"
+             step-text="在这里粘贴或者输入登录密码"
+             step-index="5"
+             step-placement="bottom">
+            <div class="small-4 medium-3 columns">
+                <label for="password" class="left inline" ng-bind="current.mode.value == 2?'更新密码':'密码'"></label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <input type="text" id="password" name="password" placeholder="请在此保存密码,如：'I am password'"
+                       select-on-click
+                       class="input-app"
+                       readonly
+                       ng-if="current.mode.value==1"
+                       ng-model="current.edit.password" />
+                <div class="row collapse" ng-if="current.mode.value!=1">
+                    <div class="small-8 medium-9 columns">
+                        <input type="password" id="password" name="password" placeholder="请在此保存密码,如：'I am password'"
+                               class="input-app"
+                               ng-required="current.mode.value==3"
+                               ng-model="current.edit.password" />
+                    </div>
+                    <div class="small-4 medium-3 columns"
+                         step-text="也可以点击这里让我们为您生成一个“强密码”"
+                         step-index="6"
+                         step-placement="left">
+                        <button type="button" class="button secondary button-app postfix" ng-click="random()">生成密码</button>
+                    </div>
+                </div>
+            </div>
+            <div class="small-8 medium-9 offset-small-4 offset-medium-3 columns" ng-show="form.password.$invalid && !form.password.$pristine">
+                <alert class="danger">请输入密码</alert>
+            </div>
+        </div>
+
+        <div class="clearfix" ng-if="current.mode.value != 1">
+            <div class="small-4 medium-3 columns">
+                <label for="verify" class="left inline">验证密码</label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <input type="password" id="verify" name="verify" placeholder="请在此验证密码"
+                       equals="current.edit.password"
+                       class="input-app"
+                       ng-init="current.temp='';"
+                       ng-model="current.temp" />
+            </div>
+            <div class="small-8 medium-9 small-offset-4 medium-offset-3 columns" ng-show="form.verify.$invalid && !form.verify.$pristine">
+                <alert class="danger">两次密码不一致</alert>
+            </div>
+        </div>
+
+        <div class="clearfix" ng-if="current.edit.password_original != null && current.edit.password_original != '' && current.mode.value == 1">
+            <div class="small-4 medium-3 columns">
+                <label for="original-password" class="left inline">退役密码</label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <input type="text" id="original-password" readonly select-on-click
+                       class="input-app"
+                       ng-model="current.edit.password_original" />
+            </div>
+        </div>
+
+        <div class="clearfix"
+             ng-if="(current.mode.value == 1 && current.edit.link != '' && current.edit.link != null) || current.mode.value != 1"
+             step-text="如果是网站，可以在粘贴网站链接"
+             step-index="7">
+            <div class="small-4 medium-3 columns">
+                <label for="link" class="left inline">登陆地址</label>
+            </div>
+            <div class="small-8 medium-9 columns">
+                <div class="row collapse" ng-if="current.mode.value == 1">
+                    <div class="small-9 medium-10 columns">
+                        <input type="url" id="link"
+                               class="input-app"
+                               readonly
+                               ng-model="current.edit.link" />
+                    </div>
+                    <div class="small-3 medium-2 columns">
+                        <button type="button" class="button secondary button-app postfix" ng-click="open()">打开</button>
+                    </div>
+                </div>
+                <input type="url" id="link"
+                       ng-if="current.mode.value!=1"
+                       class="input-app"
+                       ng-model="current.edit.link" placeholder="网站账户可以在此保持网站链接"/>
+            </div>
+        </div>
+
+        <button type="submit" class="button secondary small expand"
+                step-text="最终保存即可"
+                step-index="8"
+                ng-bind="current.mode.value==1?'更新':'保存'"
+                ng-disabled="!form.$valid"></button>
+    </div>
+</form>
+<button type="button" class="button small alert expand"
+        ng-if="current.mode.value==1"
+        ng-click="delete()">删除</button>

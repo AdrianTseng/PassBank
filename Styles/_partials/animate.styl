@@ -1,0 +1,52 @@
+@import "nib/vendor"
+@import "../_variables/colors"
+
+@keyframes fade-in {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes fade-out {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@keyframes flip-in-from-bottom {
+  from { margin-top: 100% }
+  to {}
+}
+
+@keyframes rainbow {
+  0% {color: home-fg}
+  50% {color: darken(orangered, 15)}
+  100% {color: home-fg}
+}
+
+.fade.ng-enter {
+  animation(0.5s fade-in ease-in)
+  z-index 100
+}
+
+.fade.ng-leave {
+  animation(0.4s fade-out ease-out)
+  z-index 99
+}
+
+.views.ng-enter {
+  animation(0.5s flip-in-from-bottom ease-in)
+  z-index 100
+}
+
+.views.ng-enter-stagger {
+  transition-delay 0.4s
+}
+
+.views.ng-leave {
+  animation(0.4s fade-out ease)
+  z-index 99
+}
+
+.colorful {
+  animation(rainbow 8s linear infinite)
+  z-index 98
+}

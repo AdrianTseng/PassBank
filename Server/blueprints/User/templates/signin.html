@@ -1,0 +1,29 @@
+<h2>PassBank&nbsp;服务授权</h2>
+
+<alert ng-if="alerts.invalid_user" class="danger">登录失败，请检查登录凭据</alert>
+<alert ng-if="alerts.server_error" class="danger">不好意思，服务器出错了...</alert>
+
+<form name="signin" ng-submit="user_signin(signin.$valid)" novalidate>
+    {{ form.email.label }}
+    {{ form.email(placeholder='请在这里输入您的邮箱',
+                    required='true',
+                    **{'ng-model': 'signin_data.email',
+                    'ng-model-options': "{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"}) }}
+    <alert class="danger"
+           ng-if="signin.email.$invalid && signin.$submitted">请输入邮箱</alert>
+
+    {{ form.password.label }}
+    {{ form.password(placeholder='请在这里输入您的密码',
+                    required='true',
+                    **{'ng-model': 'signin_data.password',
+                    'ng-model-options': "{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"}) }}
+    <alert class="danger"
+           ng-if="signin.password.$invalid && signin.$submitted">请输入密码</alert>
+
+    <ul class="button-group radius even-2" style="margin-top: 10vh">
+        <li><button type="submit" class="button tiny success" ng-disabled="status.busy || !signin.$valid">登录</button></li>
+        <li><a type="button" class="button tiny secondary" ng-click="to_signup()">没有帐号？注册</a></li>
+    </ul>
+</form>
+
+<a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

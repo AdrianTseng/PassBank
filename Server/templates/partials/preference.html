@@ -1,0 +1,72 @@
+{% extends "__base.html" %}
+{% block center %}
+    <alert ng-repeat="alert in alerts" type="alert.type">{{alert.msg}}</alert>
+    <form name="pin" ng-submit="update_pin(pin.$valid)" novalidate>
+        <fieldset>
+            <legend>密码银行的数据加密密码</legend>
+            <div class="row collapse" ng-if="status.keeper_activated">
+                <div class="small-4 medium-3 columns">
+                    <span class="prefix">现役PIN码</span>
+                </div>
+                <div class="small-8 medium-9 columns">
+                    <input class="input-app input-group" type="text" placeholder="用来解密现有数据的4位PIN码"
+                           name="current" pattern="\d{4}"
+                           ng-required="status.keeper_activated"
+                           ng-model="data.pin.current"
+                           ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"/>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 medium-3 columns">
+                    <span class="prefix">{{status.keeper_activated?'更新':''}}PIN码</span>
+                </div>
+                <div class="small-8 medium-9 columns">
+                    <input class="input-app input-group" type="text" placeholder="用来加密数据的4位PIN码" required
+                           name="update" pattern="\d{4}"
+                           ng-model="data.pin.update"
+                           ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"/>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 medium-3 columns">
+                    <span class="prefix">验证PIN码</span>
+                </div>
+                <div class="small-8 medium-9 columns">
+                    <input class="input-app" type="text" placeholder="验证4位PIN码" required
+                           name="verify" pattern="\d{4}"
+                           equals="data.pin.update"
+                           ng-model="data.pin.verify"
+                           ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"/>
+                </div>
+            </div>
+            <alert class="danger"
+                   ng-show="(pin.current.$invalid&&!pin.current.$pristine)||
+                        (pin.update.$invalid&&!pin.update.$pristine)||
+                        (pin.verify.$error.required &&!pin.verify.$pristine)">请填写上述四位PIN码</alert>
+            <alert class="danger" ng-show="pin.verify.$error.equals&&!pin.verify.$pristine">两次PIN码不一致！</alert>
+            <button type="submit" class="button secondary small expand user-group-button"
+                    ng-disabled="status.busy || pin.$invalid">{{status.keeper_activated?"更新PIN码":"设置PIN码,激活密码银行"}}</button>
+        </fieldset>
+    </form>
+
+    <form name="length" ng-submit="update_keeper_length(length.$valid)" novalidate>
+        <fieldset>
+            <legend>密码银行生成安全密码的默认长度</legend>
+            <div class="row collapse">
+                <div class="small-4 medium-3 columns">
+                    <span class="prefix">长度</span>
+                </div>
+                <div class="small-4 medium-7 columns">
+                    <input class="input-app" type="number" placeholder="请设置8-16位长度值" required
+                           maxlength="2"
+                           max="16"
+                           ng-model="data.length.value"
+                           ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"/>
+                </div>
+                <div class="small-4 medium-2 columns">
+                    <button type="submit" class="button secondary postfix" ng-disabled="status.busy || length.$invalid">更新</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

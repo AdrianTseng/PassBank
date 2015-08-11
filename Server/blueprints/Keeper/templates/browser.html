@@ -1,0 +1,8 @@
+<div class="panel clearfix password-list fade"
+     ng-class="{'selected': password.isActive}"
+     ng-repeat="password in passwords|filter:searchText track by password.id|orderBy:'label'"
+     ng-click="select(password)">
+    <span class="left">{{password.label}}</span>
+    <span class="right" ng-if="!password.isActive">{{password.modified_date|date:'yyyy年MM月dd日'}}</span>
+    <span class="right" ng-if="password.isActive">再次点击以查看</span>
+</div>

@@ -1,0 +1,171 @@
+@import "../_variables/base"
+@import "../_variables/colors"
+
+responsive-background(min, max, bg)
+  @media only screen and (min-width: min) and (max-width: max)
+    background-image url("/static/images/background/" + bg + ".jpg")
+    background-size 100% 100%
+
+body {
+  responsive-background(1px, 512px, "small")
+  responsive-background(513px, 1366px, "medium")
+  responsive-background(1367px, 3000px, "large")
+}
+
+section.main-section {
+  height inherit
+  main{
+    height inherit
+    div#container{
+      height inherit
+    }
+  }
+}
+
+.center-flex-panel {
+  display flex
+  justify-content center
+  align-items center
+}
+
+.optimized-area {
+  max-width content_max_width
+  width 100%
+  padding-left phone_margin_width
+  padding-right phone_margin_width
+}
+
+button-style()
+  background-color rgba(white 0.2)
+  color home-fg
+  padding-left 2px
+  padding-right 2px
+
+button-hover-style()
+  background-color rgba(black 0.3)
+  color home-fg-second
+  padding-left 2px
+  padding-right 2px
+
+input-color()
+  background-color rgba(black 0.1)
+  color home-fg-second
+
+input-focus-color()
+  background-color rgba(black 0.4)
+  color home-fg-second
+
+h1, h2 {
+  text-align center
+}
+
+h1, h2, p, button {
+  color rgba(home-fg 0.9)
+}
+
+footer {
+  p {
+    color home-fg-second
+  }
+}
+
+footer {
+  font-size 0.9rem
+  font-width 300
+  text-align center
+
+  p {
+    padding 0
+    margin 0
+    clear both
+  }
+  hr {
+    padding 0
+    margin 0
+    clear both
+  }
+}
+
+.button-app {
+  button-style()
+}
+
+button.button.small {
+  padding-top 10px
+  padding-bottom 10px
+  font-size 1em
+}
+
+.button-app:hover, .secondary.button-app:hover, .secondary.button-app:disabled {
+  button-hover-style()
+}
+
+.border-app {
+  border 1px #b9b9b9 solid
+}
+
+button.postfix, button.postfix:hover {
+  border-left 0
+}
+
+input.input-app, input[readonly].input-app {
+  input-color()
+}
+
+input.input-app:focus {
+  input-focus-color()
+}
+
+input.input-group {
+  margin-bottom 5px
+}
+
+span.prefix, span.postfix {
+  button-hover-style()
+}
+
+div.danger.alert-box {
+  padding 10px 10px 10px 10px
+  background-color rgba(red 0.5)
+  border none
+}
+
+.scroll-panel {
+  overflow-y auto
+  border-radius 5px
+  background-color rgba(#000000 0.25)
+  padding phone_margin_width
+  margin 0 auto phone_margin_width auto
+  max-height 80vh
+
+  form {
+    fieldset {
+      border 1px rgba(home-fg-second 0.5) solid
+      border-radius 5px
+      padding 1em 1em 0 1em
+    }
+
+    legend, label {
+      color rgba(home-fg-second 0.8)
+      background-color inherit
+    }
+
+    input, input[readonly] {
+      input-color()
+    }
+
+    input:focus {
+      input-focus-color()
+    }
+  }
+}
+
+form {
+  button.button.secondary {
+    button-style()
+  }
+
+  button.button.secondary:hover, .button.secondary:disabled {
+    button-hover-style()
+  }
+}

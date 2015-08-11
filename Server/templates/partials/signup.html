@@ -1,0 +1,58 @@
+{% extends "__base.html" %}
+{% block top %}
+    <div class="show-for-large-up signup-padding"></div>
+    <div class="tip-area">
+        <h2>欢迎使用我的个人 Web App</h2>
+        <p>您可以自助注销服务</p>
+    </div>
+{% endblock %}
+
+{% block center %}
+
+    <form name="signup" ng-submit="user_signup(signup.$valid)" novalidate>
+
+        <fieldset>
+            <legend>邮箱</legend>
+            <input type="email" name="email" id="email" placeholder="请输入您的邮箱" required
+                   class="input-app"
+                   ng-model="data.email"
+                   ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}"/>
+            <alert class="danger"
+                   ng-show="signup.email.$invalid && !signup.email.$pristine">您必须输入一个邮箱</alert>
+        </fieldset>
+
+        <fieldset>
+            <legend>用户名</legend>
+            <input name="username" placeholder="我们应该怎样称呼您？(汉字、字母和空格)"
+                   required type="text"
+                   class="input-app"
+                   ng-model="data.username"
+                   ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}" />
+            <alert class="danger"
+                   ng-show="signup.username.$error.required && !signup.username.$pristine">您必须输入用户名</alert>
+            <alert class="danger"
+                   ng-show="signup.username.$error.pattern && !signup.username.$pristine">只能由数字、字母与汉字组成</alert>
+        </fieldset>
+
+        <fieldset>
+            <legend>密码</legend>
+            <input name="password" placeholder="请输入您的密码"  class='input-app input-group'
+                   required type="password"
+                   ng-model="data.password"
+                   ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}" />
+            <input name="verify" placeholder="请再次输入您的密码"
+                   class="input-app"
+                   required type="password"
+                   equals="data.password"
+                   ng-model="temp.verify"
+                   ng-model-options="{updateOn: 'default blur', debounce: { default: 500, blur: 0 }}" />
+            <alert class="danger"
+                   ng-show="signup.password.$invalid && !signup.password.$pristine">您必须设定登录密码</alert>
+            <alert class="danger"
+                   ng-show="signup.verify.$invalid && !signup.verify.$pristine">两次输入的密码不一致</alert>
+        </fieldset>
+        <alert ng-if="alerts.invalid_email" class="danger">注册失败，您邮箱已经注册过了</alert>
+        <alert ng-if="alerts.server_error" class="danger">不好意思，服务器出错了...</alert>
+        <button type="submit" class="button secondary button-app expand small" ng-disabled="!signup.$valid">注册</button>
+    </form>
+{% endblock %}
